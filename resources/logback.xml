@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="A1" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${logfile.general.name:-logs/application.log}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${logfile.general.name:-logs/application.log}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 100MB -->
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <!-- keep 30 days worth of history -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <append>true</append>
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </layout>
+      <immediateFlush>true</immediateFlush>
+    </encoder>
+  </appender>
+  <root level="ERROR">
+    <appender-ref ref="A1" />
+  </root>
+  <logger name="eldar" additivity="false">
+    <level value="DEBUG"/>
+    <appender-ref ref="A1" />
+  </logger>
+</configuration>
